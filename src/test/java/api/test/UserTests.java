@@ -35,6 +35,8 @@ public class UserTests {
 		Response response = UserEndPoints.createUser(userPayload);
 		response.then().log().all();
 		Assert.assertEquals(response.getStatusCode(), 200);
+		System.out.println("******************************************************");
+
 	}
 	
 	@Test (priority = 2)
@@ -42,6 +44,7 @@ public class UserTests {
 		Response response = UserEndPoints.readUser(this.userPayload.getUsername());
 		response.then().log().all();
 		Assert.assertEquals(response.getStatusCode(), 200);
+		System.out.println("******************************************************");
 	}
 	
 	@Test(priority = 3)
@@ -62,12 +65,15 @@ public class UserTests {
 		Response responseAfterUpdate = UserEndPoints.readUser(this.userPayload.getUsername());
 //		responseAfterUpdate.then().log().all();
 		Assert.assertEquals(responseAfterUpdate.getStatusCode(), 200);
+		System.out.println("******************************************************");
+
 	}
 	
 	@Test(priority = 4)
 	public void testDeleteUserByName() {
 		Response response = UserEndPoints.deleteUser(this.userPayload.getUsername());
 		Assert.assertEquals(response.getStatusCode(), 200);
+		System.out.println("******************************************************");
 
 	}
 
