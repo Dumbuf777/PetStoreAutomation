@@ -18,13 +18,14 @@ import api.endpoints.UserEndPoints;
 import api.payload.Category;
 import api.payload.Pet;
 import api.payload.Tag;
+import api.utilities.BaseClass;
 import io.restassured.response.Response;
 
 /**
  * @author shrikrushna.sonkar
  *
  */
-public class PetTests {
+public class PetTests extends BaseClass {
 	
 	Faker faker;
 	Pet petPayload;
@@ -70,26 +71,32 @@ public class PetTests {
 	
 	@Test(priority = 1)
 	public void testPostPet() {
-		
+		test = extentCreateTest("Add new pet to the store");
 		Response response = PetEndPoints.addPetToStore(petPayload);
 		response.then().log().all();
+		test.info(response.asPrettyString().replace(",", ",<br>"));
 		Assert.assertEquals(response.getStatusCode(), 200);
+		test.info("Add new pet to the store response code - "+response.getStatusCode());
+
 		System.out.println("**********************************************************");
 	}
+	
 	
 	@Test (priority = 2)
 	public void testGetUserName() {
+		test = extentCreateTest("Get added pet details in store");
 		Response response = PetEndPoints.readPets(this.petPayload.getId());
 		response.then().log().all();
 		Assert.assertEquals(response.getStatusCode(), 200);
+		test.info(response.asPrettyString().replace(",", ",<br>"));
+		test.info("Get pet response code -"+response.getStatusCode());
 		System.out.println("**********************************************************");
 	}
-	
 	
 	
 	@Test (priority = 3)
 	public void testUpdatetPet() {
-		
+		test = extentCreateTest("Update an existing pet details in store");
 		// update data using pet payoad 
 		petPayload.setName(faker.name().name());
 		petPayload.setStatus("unavailable");
@@ -98,13 +105,20 @@ public class PetTests {
 		Response response = PetEndPoints.updatePets(this.petPayload.getId(), petPayload);
 		response.then().log().all();
 		Assert.assertEquals(response.getStatusCode(), 200);
+		test.info(response.asPrettyString().replace(",", ",<br>"));
+		test.info("Get pet response code -"+response.getStatusCode());
 		System.out.println("**********************************************************");
 	}
 
+	
 	@Test(priority = 4)
 	public void testDeletePetById() {
+		test = extentCreateTest("Delete a pet");
+
 		Response response = PetEndPoints.deletePets(this.petPayload.getId());
 		Assert.assertEquals(response.getStatusCode(), 200);
+		test.info("Delete pet response code -"+response.getStatusCode());
+
 		System.out.println("**********************************************************");
 	}
 	

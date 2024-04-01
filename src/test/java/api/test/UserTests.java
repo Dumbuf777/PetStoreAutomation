@@ -8,9 +8,10 @@ import com.github.javafaker.Faker;
 
 import api.endpoints.UserEndPoints;
 import api.payload.User;
+import api.utilities.BaseClass;
 import io.restassured.response.Response;
 
-public class UserTests {
+public class UserTests  extends BaseClass{
 	
 	Faker faker;
 	User userPayload;
@@ -31,25 +32,47 @@ public class UserTests {
 	
 	@Test(priority = 1)
 	public void testPostUser(){
-		
+		test = extentCreateTest("Create user");
 		Response response = UserEndPoints.createUser(userPayload);
 		response.then().log().all();
+		test.info(response.asPrettyString().replace(",", ",<br>"));
 		Assert.assertEquals(response.getStatusCode(), 200);
-		System.out.println("******************************************************");
+		test.info("Create user response code - "+response.getStatusCode());
+		long responseTime = response.getTime();
+		System.out.println("Response time is " + responseTime);
+		if (responseTime < 3000) {
+			test.pass("Response status " + responseTime);
+		} else {
+			test.fail("Response status " + responseTime);
+		}
+		System.out.println("*********************************************************************");
 
 	}
 	
 	@Test (priority = 2)
 	public void testGetUserName() {
+		test = extentCreateTest("Get user");
+
 		Response response = UserEndPoints.readUser(this.userPayload.getUsername());
 		response.then().log().all();
 		Assert.assertEquals(response.getStatusCode(), 200);
-		System.out.println("******************************************************");
+		test.info(response.asPrettyString().replace(",", ",<br>"));
+		test.info("Get user response code -"+response.getStatusCode());
+		long responseTime = response.getTime();
+		System.out.println("Response time is " + responseTime);
+		if (responseTime < 3000) {
+			test.pass("Response time " + responseTime);
+		} else {
+			test.fail("Response time " + responseTime);
+		}
+
+		System.out.println("**********************************************************************");
 	}
 	
 	@Test(priority = 3)
 	public void testUpdateUserByName() {
-		
+		test = extentCreateTest("Update user");
+
 		//update data using payload
 		userPayload.setFirstName(faker.name().firstName());
 		userPayload.setLastName(faker.name().lastName());
@@ -65,16 +88,39 @@ public class UserTests {
 		Response responseAfterUpdate = UserEndPoints.readUser(this.userPayload.getUsername());
 //		responseAfterUpdate.then().log().all();
 		Assert.assertEquals(responseAfterUpdate.getStatusCode(), 200);
-		System.out.println("******************************************************");
+		test.info(response.asPrettyString().replace(",", ",<br>"));
+		test.info("Update user response code -"+response.getStatusCode());
+		
+		long responseTime = response.getTime();
+		System.out.println("Response time is " + responseTime);
+		if (responseTime < 3000) {
+			test.pass("Response time " + responseTime);
+		} else {
+			test.fail("Response time " + responseTime);
+		}
+
+		System.out.println("**********************************************************************");
 
 	}
 	
 	@Test(priority = 4)
 	public void testDeleteUserByName() {
+		test = extentCreateTest("Delete user");
+
 		Response response = UserEndPoints.deleteUser(this.userPayload.getUsername());
 		Assert.assertEquals(response.getStatusCode(), 200);
+		test.info("Delete user response code -"+response.getStatusCode());
+		
+		long responseTime = response.getTime();
+		System.out.println("Response time is " + responseTime);
+		if (responseTime < 3000) {
+			test.pass("Response time " + responseTime);
+		} else {
+			test.fail("Response time " + responseTime);
+		}
 		System.out.println("******************************************************");
 
 	}
-
+	
+	
 }
